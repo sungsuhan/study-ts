@@ -3,13 +3,13 @@ type Name = string;
 type Age = number;
 
 // optional
-type Player1 = {
+type Player2 = {
     name: Name,
     age?: Age
 };
 
 // 인자 타입 선언
-const playerMaker = (name:string) : Player1 => ({ name });
+const playerMaker = (name:string) : Player2 => ({ name });
 const sungsu = playerMaker("sungsu")
 sungsu.age = 29;
 
@@ -112,9 +112,9 @@ abstract class User {
     }
 }
 
-class Player extends User{}
+class Player1 extends User{}
 
-const han = new Player("ss", "han", "hss");
+const han = new Player1("ss", "han", "hss");
 
 han.getFullName();
 
@@ -170,3 +170,129 @@ dict.def("sushi");
 dict.del("kimchi")
 dict.upd("kimchi","매움");
 
+// interface 1
+type Team = "red" | "blue" | "yellow";
+type Health = 1 | 5 | 10;
+
+type Player = {
+    nickname:string,
+    team:Team,
+    health: Health,
+}
+
+interface Person {
+    nickname: string,
+    team: Team,
+    health: Health
+}
+
+// interface 2 === interface 3
+interface User2 {
+    name:string
+}
+
+interface Player3 extends User2 {
+}
+
+const h : Player3 = {
+    name: "sungsu"
+}
+
+// interface 3 === interface 2
+type User3 = {
+    name:string
+}
+
+type Player4 = User3 & {
+}
+
+const hh: Player4 = {
+    name:"sungsuu"
+}
+
+// interface 4
+interface User5 {
+    names: string
+}
+interface User5 {
+    lastNames: string
+}
+interface User5 {
+    healthes: number
+}
+
+const ss:User5 = {
+    names: "ss",
+    lastNames: "han",
+    healthes: 10
+}
+
+// class + interface (1)
+abstract class User10 {
+    constructor(
+        protected firstName:string,
+        protected lastName:string
+    ) {}
+    abstract sayHi(name:string):string
+    abstract fullName():string
+}
+class Player10 extends User10{
+    fullName() {
+        return `${this.firstName} ${this.lastName}`;
+    }
+    sayHi(name:string){
+        return `Hello ${name}! My name is ${this.fullName}.`
+    }
+}
+
+// class + interface (2)
+interface User11 {
+    firstName:string,
+    lastName:string,
+    sayHi(name:string):string,
+    fullName():string
+}
+interface Human {
+    health:number
+}
+class Player11 implements User11, Human{
+    constructor(
+        public firstName:string,
+        public lastName:string,
+        public health:number,
+    ){}
+    fullName() {
+        return `${this.firstName} ${this.lastName}`;
+    }
+    sayHi(name:string){
+        return `Hello ${name}! My name is ${this.fullName}.`
+    }
+}
+
+// 다형성(제네릭 사용)
+interface SStorage<T> {
+    [key:string]: T
+}
+class LocalStorage<T> {
+    private storage: SStorage<T> = {}
+    set(key:string, value:T){
+        this.storage[key] = value;
+    }
+    remove(key:string){
+        delete this.storage[key]
+    }
+    get(key:string):T{
+        return this.storage[key]
+    }
+    clear(){
+        this.storage = {}
+    }
+}
+
+const stringSStorage = new LocalStorage<string>()
+
+stringSStorage.get("aa")
+
+const booleanSStorage = new LocalStorage<boolean>()
+
+booleanSStorage.get("bb")
